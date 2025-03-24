@@ -30,7 +30,9 @@
     - Уведомление клиента (отправить чек). Запрос к Notification Service. Метод POST. Маршрут /notifications. Входные данные (userId, message, socket_user}. Ответ (userId, status)
   + *Сервис расчета скидок и акций (Discount Service)*
     1. Применение скидок. Ответ для Order Service. Метод POST. Маршрут /discounts/users.
-    2. Уведомление клиентов (об акциях). Запрос к Notification Service. Метод: POST /notifications. Входные данные (userId, message, socket_user}. Ответ (userId, status)
+       - Не аутентифицированный пользователь: Входные данные (orderId, storeId, items, price). Ответ (discount_title, new_price).
+       - Аутентифицированный пользователь: Входные данные (userId, orderId, storeId, items, price). Если выбрана скидка добавляется ключ discountId к запросу. Ответ (discount_title, new_price).
+    3. Уведомление клиентов (об акциях). Запрос к Notification Service. Метод: POST /notifications. Входные данные (userId, message, socket_user}. Ответ (userId, status)
 
 
 
