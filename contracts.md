@@ -22,7 +22,7 @@
   + *Сервис расчета скидок и акций (Discount Service)*
         1. Применение скидок. Ответ для Order Service. Метод POST. Маршрут /discounts/users. Не аутентифицированный пользователь: Входные данные (orderId, storeId, items, price). Ответ (discount_title, new_price). Аутентифицированный пользователь: Входные данные (userId, orderId, storeId, items, price). Если выбрана скидка добавляется ключ discountId к запросу. Ответ (discount_title, new_price
         2. Уведомление клиентов (об акциях). Запрос к Notification Service. Метод: POST /notifications. Входные данные (userId, message, socket_user}. Ответ (userId, status)
-    + *Сервис оплаты (Payment Service)*
+  + *Сервис оплаты (Payment Service)*
 
 
 
