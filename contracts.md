@@ -12,13 +12,13 @@
       10. Обратная связь от Payment Service: Получает обновление статуса оплаты (POST /orders/{orderId}/payment-status). Входные данные (orderId, paymentId, status).
       11. Обратная связь от Delivery Service. Получает статус доставки (POST /orders/{orderId}/delivery-status). Входные данные (orderId, deliveryId, status).
   + Сервис аутентификации (Authentication Service)
-       - Проверка клиента. Ответ для Order Service. Метод: POST auth/check_users. Входные данные (JWT-токен в заголовке). Ответ (userId, name, email, address, auth: true/false)
-       - Уведомление клиента. Запрос к Notification Service. Метод: POST /notifications. Входные данные (userId, message, socket_channel}. Ответ (userId, status)
+       1. Проверка клиента. Ответ для Order Service. Метод: POST auth/check_users. Входные данные (JWT-токен в заголовке). Ответ (userId, name, email, address, auth: true/false)
+       2. Уведомление клиента. Запрос к Notification Service. Метод: POST /notifications. Входные данные (userId, message, socket_channel}. Ответ (userId, status)
   + Сервис управления магазинами (Store Management Service)
-       - Список магазинов. Ответ для Order Service.  Метод GET. Маршрут /stores?lat={latitude}&lon={longitude}&delivery={true/false}. Входные данные: координаты клиента (lat, lon), флаг доставки (delivery). Ответ (id, title, address, supportDelivery: true/false, distance)
-       - Меню магазина. Ответ для Order Service.  Метод GET. Маршрут /stores/{storeId}/menu. Входные данные: ID магазина (storeId). Ответ (storeId: [menu: [itemId, name, price, available]])
-       - Время готовности заказа. Ответ для Order Service. Метод GET. Маршрут /stores/{storeId}/readiness?items={itemIds}. Ответ (storeId, readiness)
-       - Адрес для доставки. Ответ для Delivery Service. Метод: GET /stores/{storeId}. Ответ (storeId, address).
+       1. Список магазинов. Ответ для Order Service.  Метод GET. Маршрут /stores?lat={latitude}&lon={longitude}&delivery={true/false}. Входные данные: координаты клиента (lat, lon), флаг доставки (delivery). Ответ (id, title, address, supportDelivery: true/false, distance)
+       2. Меню магазина. Ответ для Order Service.  Метод GET. Маршрут /stores/{storeId}/menu. Входные данные: ID магазина (storeId). Ответ (storeId: [menu: [itemId, name, price, available]])
+       3. Время готовности заказа. Ответ для Order Service. Метод GET. Маршрут /stores/{storeId}/readiness?items={itemIds}. Ответ (storeId, readiness)
+       4. Адрес для доставки. Ответ для Delivery Service. Метод: GET /stores/{storeId}. Ответ (storeId, address).
 
 
 
