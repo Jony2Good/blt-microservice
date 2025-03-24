@@ -25,6 +25,11 @@
             1.2. Аутентифицированный пользователь: Входные данные (userId, orderId, storeId, items, price). Если выбрана скидка добавляется ключ discountId к запросу. Ответ (discount_title, new_price).
         2. Уведомление клиентов (об акциях). Запрос к Notification Service. Метод: POST /notifications. Входные данные (userId, message, socket_user}. Ответ (userId, status)
   + *Сервис оплаты (Payment Service)*
+    - Обработка оплаты. Ответ для Order Service. Метод POST. Маршрут /payments/create. Входные данные (orderId, amount, payment_method, store_id). Ответ (paymentId, amount, status: complited(онлайн), pending(магазин/курьер))
+    - Обновление статуса. Запрос к Order Service. Метод POST. Маршрут /orders/{orderId}/payment-status. Входные данные (orderId, paymentId, status).
+    - Уведомление клиента (отправить чек). Запрос к Notification Service. Метод POST. Маршрут /notifications. Входные данные (userId, message, socket_user}. Ответ (userId, status)   
+
+
 
 
 
