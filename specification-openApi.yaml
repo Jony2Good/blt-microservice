@@ -1,0 +1,462 @@
+openapi: 3.0.0
+info:
+  title: API по взаимодействию микросервисов
+  description: API спецификация для сервиса "BLT Национальная сеть магазинов сэндвичей" 
+  version: 1.0.0
+
+servers:
+  - url: 'https://blt/test.com'
+    description: STAGING
+  - url: 'https://blt.pro'
+    description: PROD
+
+paths:
+  # Order Service Interactions
+  /auth/check_users:
+    post:
+      summary: Аутентификация клиента
+      tags:
+        - Order Service
+        - Authentication Service
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                jwt_token:
+                  type: string
+                  description: JWT token in header
+      responses:
+        '200':
+          description: User authentication result
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserAuthResponse'
+
+  /stores:
+    get:
+      summary: Получить список магазинов
+      tags:
+        - Order Service
+        - Store Management Service
+      parameters:
+        - name: lat
+          in: query
+          required: true
+          schema:
+            type: number
+            format: float
+        - name: lon
+          in: query
+          required: true
+          schema:
+            type: number
+            format: float
+        - name: delivery
+          in: query
+          required: true
+          schema:
+            type: boolean
+      responses:
+        '200':
+          description: List of stores
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Store'
+
+  /stores/{storeId}/menu:
+    get:
+      summary: Получить меню магазина
+      tags:
+        - Order Service
+        - Store Management Service
+      parameters:
+        - name: storeId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Store menu
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StoreMenu'
+
+  /discounts/users:
+    post:
+      summary: Применить скидку
+      tags:
+        - Order Service
+        - Discount Service
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              oneOf:
+                - $ref: '#/components/schemas/DiscountRequestUnauthenticated'
+                - $ref: '#/components/schemas/DiscountRequestAuthenticated'
+      responses:
+        '200':
+          description: Discount applied
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DiscountResponse'
+
+  /payments/create:
+    post:
+      summary: Оплата заказа
+      tags:
+        - Order Service
+        - Payment Service
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PaymentRequest'
+      responses:
+        '200':
+          description: Payment processed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaymentResponse'
+
+  /deliveries/create:
+    post:
+      summary: Создать доставку
+      tags:
+        - Order Service
+        - Delivery Service
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DeliveryRequest'
+      responses:
+        '200':
+          description: Delivery created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeliveryResponse'
+
+  /stores/{storeId}/readiness:
+    get:
+      summary: Получить время готовности заказа
+      tags:
+        - Order Service
+        - Store Management Service
+      parameters:
+        - name: storeId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: items
+          in: query
+          required: true
+          schema:
+            type: string
+            description: Comma-separated list of item IDs
+      responses:
+        '200':
+          description: Readiness time
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReadinessResponse'
+
+  /notifications:
+    post:
+      summary: Отправить уведомление
+      tags:
+        - Order Service
+        - Notification Service
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NotificationRequest'
+      responses:
+        '200':
+          description: Notification sent
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotificationResponse'
+
+  /orders/{orderId}/payment-status:
+    post:
+      summary: Обновить статус оплаты
+      tags:
+        - Order Service
+        - Payment Service
+      parameters:
+        - name: orderId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PaymentStatusUpdate'
+      responses:
+        '200':
+          description: Status updated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  orderId:
+                    type: string
+                  status:
+                    type: string
+
+  /orders/{orderId}/delivery-status:
+    post:
+      summary: Обновить статус доставки
+      tags:
+        - Order Service
+        - Delivery Service
+      parameters:
+        - name: orderId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DeliveryStatusUpdate'
+      responses:
+        '200':
+          description: Status updated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  orderId:
+                    type: string
+                  status:
+                    type: string
+
+components:
+  schemas:
+    UserAuthResponse:
+      type: object
+      properties:
+        userId:
+          type: string
+        name:
+          type: string
+        email:
+          type: string
+        address:
+          type: string
+        auth:
+          type: boolean
+
+    Store:
+      type: object
+      properties:
+        id:
+          type: string
+        title:
+          type: string
+        address:
+          type: string
+        supportDelivery:
+          type: boolean
+        distance:
+          type: number
+          format: float
+
+    StoreMenu:
+      type: object
+      properties:
+        storeId:
+          type: string
+        menu:
+          type: array
+          items:
+            type: object
+            properties:
+              itemId:
+                type: string
+              name:
+                type: string
+              price:
+                type: number
+                format: float
+              available:
+                type: boolean
+
+    DiscountRequestUnauthenticated:
+      type: object
+      properties:
+        orderId:
+          type: string
+        storeId:
+          type: string
+        items:
+          type: array
+          items:
+            type: string
+        price:
+          type: number
+          format: float
+
+    DiscountRequestAuthenticated:
+      type: object
+      properties:
+        userId:
+          type: string
+        orderId:
+          type: string
+        storeId:
+          type: string
+        items:
+          type: array
+          items:
+            type: string
+        price:
+          type: number
+          format: float
+        discountId:
+          type: string
+          nullable: true
+
+    DiscountResponse:
+      type: object
+      properties:
+        discount_title:
+          type: string
+        new_price:
+          type: number
+          format: float
+
+    PaymentRequest:
+      type: object
+      properties:
+        orderId:
+          type: string
+        amount:
+          type: number
+          format: float
+        payment_method:
+          type: string
+        store_id:
+          type: string
+
+    PaymentResponse:
+      type: object
+      properties:
+        paymentId:
+          type: string
+        amount:
+          type: number
+          format: float
+        status:
+          type: string
+          enum: [completed, pending]
+
+    DeliveryRequest:
+      type: object
+      properties:
+        orderId:
+          type: string
+        storeId:
+          type: string
+        user:
+          type: object
+          properties:
+            id:
+              type: string
+            phone:
+              type: string
+            address:
+              type: string
+
+    DeliveryResponse:
+      type: object
+      properties:
+        deliveryId:
+          type: string
+        delivery_time:
+          type: string
+          format: date-time
+        status:
+          type: string
+
+    ReadinessResponse:
+      type: object
+      properties:
+        storeId:
+          type: string
+        readiness:
+          type: string
+
+    NotificationRequest:
+      type: object
+      properties:
+        user:
+          type: object
+          properties:
+            id:
+              type: string
+            phone:
+              type: string
+            email:
+              type: string
+        message:
+          type: string
+        socket_channel:
+          type: string
+
+    NotificationResponse:
+      type: object
+      properties:
+        userId:
+          type: string
+        status:
+          type: string
+
+    PaymentStatusUpdate:
+      type: object
+      properties:
+        orderId:
+          type: string
+        paymentId:
+          type: string
+        status:
+          type: string
+
+    DeliveryStatusUpdate:
+      type: object
+      properties:
+        orderId:
+          type: string
+        deliveryId:
+          type: string
+        status:
+          type: string
