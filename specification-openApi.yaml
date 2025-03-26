@@ -3,7 +3,9 @@ info:
   title: API по взаимодействию микросервисов
   description: API спецификация для сервиса "BLT Национальная сеть магазинов сэндвичей" 
   version: 1.0.0
-
+  contact:
+    name: Jony2Good
+    email: sergeev.artem2013@gmail.com
 servers:
   - url: 'https://blt/test.com'
     description: STAGING
