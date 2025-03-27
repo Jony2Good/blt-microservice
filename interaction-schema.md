@@ -16,7 +16,7 @@
 ------------
 
 Схема:
-[![Схема взаимодействия клиент-заказ](https://github.com/Jony2Good/blt-microservice/blob/main/schema-client-order.jpg "Схема взаимодействия клиент-заказ")
+![Схема взаимодействия клиент-заказ](https://github.com/Jony2Good/blt-microservice/blob/main/schema-client-order.jpg "Схема взаимодействия клиент-заказ")
 
 ------------
 
