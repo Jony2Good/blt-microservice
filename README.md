@@ -25,3 +25,20 @@
 - Сэндвич-магазины работают по франшизе, у каждого из них свой владелец.
 - Головная компания планирует в ближайшем будущем выйти на зарубежный рынок.
 - Цель корпорации — нанять недорогую рабочую силу для максимизации прибыли.
+
+### Решение задачи
+
+Используемые паттерны декомпозиции: Business Capability и Domain-Driven design.
+
+*Ссылки на решение:*
+[1. Пользовательские сценарии][1]
+[2. Общая схема взаимодействия сервисов][2]
+[3. Описание назначение сервисов и зоны их ответственности][3]
+[4. Описание контрактов взаимодействия][4]
+[5. Спецификация по стандартам OpenApi][5]
+
+[1]: https://github.com/Jony2Good/blt-microservice/blob/main/scenario.md "Пользовательские сценарии"
+[2]: https://github.com/Jony2Good/blt-microservice/blob/main/interaction-schema.md "Общая схема взаимодействия сервисов"
+[3]: https://github.com/Jony2Good/blt-microservice/blob/main/purpose-area.md "Описание назначение сервисов и зоны их ответственности"
+[4]: https://github.com/Jony2Good/blt-microservice/blob/main/contracts.md " Описание контрактов взаимодействия"
+[5]: https://github.com/Jony2Good/blt-microservice/blob/main/specification-openapi.yaml "Спецификация по стандартам OpenApi"
